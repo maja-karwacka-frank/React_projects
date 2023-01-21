@@ -44,3 +44,8 @@ const CourseInput = (props) => {
 };
 
 export default CourseInput;
+
+// dynamiczne dodawanie klas:
+{/* <div className={`form-control ${!isValid ? 'invalid' : ''}`}></div>
+
+i w css tworzymy klasę .form-control.invalid i odpowiednio stylujemy  */}
