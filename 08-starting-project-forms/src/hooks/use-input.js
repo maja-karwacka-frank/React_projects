@@ -15,17 +15,17 @@ export const useInput = (validateValue) => {
 		setIsTouched(true);
 	};
 
-    const reset = () => {
-        setEnteredValue('')
-        setIsTouched(false)
-    }
+	const reset = () => {
+		setEnteredValue('');
+		setIsTouched(false);
+	};
 
 	return {
 		value: enteredValue,
-        isValid: valueIsValid,
+		isValid: valueIsValid,
 		hasError,
 		inputBlurHandler,
 		valueChangeHandler,
-        reset
+		reset,
 	};
 };
