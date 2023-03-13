@@ -2,10 +2,13 @@ import React, { useState, useCallback, useEffect } from 'react';
 
 import IngredientForm from './IngredientForm';
 import Search from './Search';
+import ErrorModal from '../UI/ErrorModal';
 import IngredientsList from './IngredientList';
 
 function Ingredients() {
 	const [userIngredients, setUserIngredients] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState();
 
 	useEffect(() => {
 		console.log(userIngredients);
@@ -16,6 +19,7 @@ function Ingredients() {
 	}, []);
 
 	const addIngredientHandler = (ingredient) => {
+		setIsLoading(true);
 		fetch(
 			'https://react-project-b3b30-default-rtdb.europe-west1.firebasedatabase.app/ingredients.json',
 			{
@@ -25,6 +29,7 @@ function Ingredients() {
 			}
 		)
 			.then((response) => {
+				setIsLoading(false);
 				return response.json();
 			})
 			.then((responseData) => {
@@ -35,16 +40,37 @@ function Ingredients() {
 			});
 	};
 
-	const removeIngredientHandler = (ingradientId) => {
-		setUserIngredients((prevIngredients) =>
-			prevIngredients.filter((ingredient) => ingredient.id !== ingradientId)
-		);
+	const removeIngredientHandler = (ingredientId) => {
+		setIsLoading(true);
+		fetch(
+			`https://react-project-b3b30-default-rtdb.europe-west1.firebasedatabase.app/ingredients/${ingredientId}.json`,
+			{
+				method: 'DELETE',
+			}
+		)
+			.then((response) => {
+				setIsLoading(false);
+				setUserIngredients((prevIngredients) =>
+					prevIngredients.filter((ingredient) => ingredient.id !== ingredientId)
+				);
+			})
+			.catch((error) => {
+				setError('Something went wrong!');
+				setIsLoading(false);
+			});
+	};
+
+	const clearError = () => {
+		setError(null);
 	};
 
 	return (
 		<div className='App'>
-			<IngredientForm onAddIngredient={addIngredientHandler} />
-
+			{error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
+			<IngredientForm
+				onAddIngredient={addIngredientHandler}
+				loading={isLoading}
+			/>
 			<section>
 				<Search onLoadIngredients={filteredIngredientsHandler} />
 				<IngredientsList
