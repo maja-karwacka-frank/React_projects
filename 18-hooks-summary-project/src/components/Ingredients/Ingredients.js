@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 
 import IngredientForm from './IngredientForm';
 import Search from './Search';
 import ErrorModal from '../UI/ErrorModal';
 import IngredientsList from './IngredientList';
+import useHttp from '../../hooks/http';
 
 const ingredientReducer = (currentIngredients, action) => {
 	switch (action.type) {
@@ -18,110 +19,73 @@ const ingredientReducer = (currentIngredients, action) => {
 	}
 };
 
-const httpReducer = (curHttpState, action) => {
-	switch (action.type) {
-		case 'SEND':
-			return { loading: true, error: null };
-		case 'RESPONSE':
-			return { ...curHttpState, loading: false };
-		case 'ERROR':
-			return { loading: false, error: action.errorMessage };
-		case 'CLEAR':
-			return { ...curHttpState, error: null };
-		default:
-			throw new Error('Should not be reached');
-	}
-};
-
 function Ingredients() {
 	const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-	const [httpState, dispachHttp] = useReducer(httpReducer, {
-		loading: false,
-		errror: null,
-	});
-	// const [userIngredients, setUserIngredients] = useState([]);
-	// const [isLoading, setIsLoading] = useState(false);
-	// const [error, setError] = useState();
+	const { isLoading, error, data, sendRequest, reqExtra, reqIdentifier } =
+		useHttp();
 
 	useEffect(() => {
-		console.log(userIngredients);
-	}, [userIngredients]);
+		if (!isLoading && !error && reqIdentifier === 'REMOVE_INGREDIENT') {
+			dispatch({ type: 'DELETE', id: reqExtra });
+		} else if (!isLoading && !error && reqIdentifier === 'ADD_INGREDIENT') {
+			dispatch({
+				type: 'ADD',
+				ingredient: { id: data.name, ...reqExtra },
+			});
+		}
+	}, [data, reqExtra, reqIdentifier, isLoading, error]);
 
 	const filteredIngredientsHandler = useCallback((filteredIngredients) => {
-		// setUserIngredients(filteredIngredients);
 		dispatch({ type: 'SET', ingredients: filteredIngredients });
 	}, []);
 
-	const addIngredientHandler = (ingredient) => {
-		// setIsLoading(true);
-		dispachHttp({ type: 'SEND' });
-		fetch(
-			'https://react-project-b3b30-default-rtdb.europe-west1.firebasedatabase.app/ingredients.json',
-			{
-				method: 'POST',
-				body: JSON.stringify(ingredient),
-				headers: { 'Content-Type': 'application/json' },
-			}
-		)
-			.then((response) => {
-				// setIsLoading(false);
-				dispachHttp({ type: 'RESPONSE' });
-				return response.json();
-			})
-			.then((responseData) => {
-				// setUserIngredients((prevIngredients) => [
-				// 	...prevIngredients,
-				// 	{ id: responseData.name, ...ingredient },
-				// ]);
-				dispatch({
-					type: 'ADD',
-					ingredient: { id: responseData.name, ...ingredient },
-				});
-			});
-	};
+	const addIngredientHandler = useCallback(
+		(ingredient) => {
+			sendRequest(
+				'https://react-project-b3b30-default-rtdb.europe-west1.firebasedatabase.app/ingredients.json',
+				'POST',
+				JSON.stringify(ingredient),
+				'ADD_INGREDIENT'
+			);
+		},
+		[sendRequest]
+	);
 
-	const removeIngredientHandler = (ingredientId) => {
-		// setIsLoading(true);
-		dispachHttp({ type: 'SEND' });
-		fetch(
-			`https://react-project-b3b30-default-rtdb.europe-west1.firebasedatabase.app/ingredients/${ingredientId}.json`,
-			{
-				method: 'DELETE',
-			}
-		)
-			.then((response) => {
-				// setIsLoading(false);
-				dispachHttp({ type: 'RESPONSE' });
-				// setUserIngredients((prevIngredients) =>
-				// 	prevIngredients.filter((ingredient) => ingredient.id !== ingredientId)
-				// );
-				dispatch({ type: 'DELETE', id: ingredientId });
-			})
-			.catch((error) => {
-				dispachHttp({ type: 'ERROR', errorMessage: 'Something went wrong!' });
-				// setError('Something went wrong!');
-				// setIsLoading(false);
-			});
-	};
+	const removeIngredientHandler = useCallback(
+		(ingredientId) => {
+			sendRequest(
+				`https://react-project-b3b30-default-rtdb.europe-west1.firebasedatabase.app/ingredients/${ingredientId}.json`,
+				'DELETE',
+				null,
+				ingredientId,
+				'REMOVE_INGREDIENT'
+			);
+		},
+		[sendRequest]
+	);
 
-	const clearError = () => {
-		dispachHttp({ type: 'CLEAR' });
-		// setError(null);
-	};
+	const clearError = useCallback(() => {}, []);
+
+	// useMemo przechowuje dowolne dane których nie chcemy odtwarzać przy każdym cyklu renderowania komponentu, ale tylko wtedy gdy tego potrzebujemy.
+	const ingredientList = useMemo(() => {
+		return (
+			<IngredientsList
+				ingredients={userIngredients}
+				onRemoveItem={removeIngredientHandler}
+			/>
+		);
+	}, [userIngredients, removeIngredientHandler]);
 
 	return (
 		<div className='App'>
-			{httpState.error && <ErrorModal onClose={clearError}>{httpState.error}</ErrorModal>}
+			{error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
 			<IngredientForm
 				onAddIngredient={addIngredientHandler}
-				loading={httpState.loading}
+				loading={isLoading}
 			/>
 			<section>
 				<Search onLoadIngredients={filteredIngredientsHandler} />
-				<IngredientsList
-					ingredients={userIngredients}
-					onRemoveItem={removeIngredientHandler}
-				/>
+				{ingredientList}
 			</section>
 		</div>
 	);
