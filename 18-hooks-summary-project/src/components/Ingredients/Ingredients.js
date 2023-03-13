@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 
 import IngredientForm from './IngredientForm';
 import Search from './Search';
@@ -14,15 +14,34 @@ const ingredientReducer = (currentIngredients, action) => {
 		case 'DELETE':
 			return currentIngredients.filter((ing) => ing.id !== action.id);
 		default:
-			throw new Error('Should nor get there!');
+			throw new Error('Should not get there!');
+	}
+};
+
+const httpReducer = (curHttpState, action) => {
+	switch (action.type) {
+		case 'SEND':
+			return { loading: true, error: null };
+		case 'RESPONSE':
+			return { ...curHttpState, loading: false };
+		case 'ERROR':
+			return { loading: false, error: action.errorMessage };
+		case 'CLEAR':
+			return { ...curHttpState, error: null };
+		default:
+			throw new Error('Should not be reached');
 	}
 };
 
 function Ingredients() {
 	const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
+	const [httpState, dispachHttp] = useReducer(httpReducer, {
+		loading: false,
+		errror: null,
+	});
 	// const [userIngredients, setUserIngredients] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState();
+	// const [isLoading, setIsLoading] = useState(false);
+	// const [error, setError] = useState();
 
 	useEffect(() => {
 		console.log(userIngredients);
@@ -34,7 +53,8 @@ function Ingredients() {
 	}, []);
 
 	const addIngredientHandler = (ingredient) => {
-		setIsLoading(true);
+		// setIsLoading(true);
+		dispachHttp({ type: 'SEND' });
 		fetch(
 			'https://react-project-b3b30-default-rtdb.europe-west1.firebasedatabase.app/ingredients.json',
 			{
@@ -44,7 +64,8 @@ function Ingredients() {
 			}
 		)
 			.then((response) => {
-				setIsLoading(false);
+				// setIsLoading(false);
+				dispachHttp({ type: 'RESPONSE' });
 				return response.json();
 			})
 			.then((responseData) => {
@@ -60,7 +81,8 @@ function Ingredients() {
 	};
 
 	const removeIngredientHandler = (ingredientId) => {
-		setIsLoading(true);
+		// setIsLoading(true);
+		dispachHttp({ type: 'SEND' });
 		fetch(
 			`https://react-project-b3b30-default-rtdb.europe-west1.firebasedatabase.app/ingredients/${ingredientId}.json`,
 			{
@@ -68,28 +90,31 @@ function Ingredients() {
 			}
 		)
 			.then((response) => {
-				setIsLoading(false);
+				// setIsLoading(false);
+				dispachHttp({ type: 'RESPONSE' });
 				// setUserIngredients((prevIngredients) =>
 				// 	prevIngredients.filter((ingredient) => ingredient.id !== ingredientId)
 				// );
 				dispatch({ type: 'DELETE', id: ingredientId });
 			})
 			.catch((error) => {
-				setError('Something went wrong!');
-				setIsLoading(false);
+				dispachHttp({ type: 'ERROR', errorMessage: 'Something went wrong!' });
+				// setError('Something went wrong!');
+				// setIsLoading(false);
 			});
 	};
 
 	const clearError = () => {
-		setError(null);
+		dispachHttp({ type: 'CLEAR' });
+		// setError(null);
 	};
 
 	return (
 		<div className='App'>
-			{error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
+			{httpState.error && <ErrorModal onClose={clearError}>{httpState.error}</ErrorModal>}
 			<IngredientForm
 				onAddIngredient={addIngredientHandler}
-				loading={isLoading}
+				loading={httpState.loading}
 			/>
 			<section>
 				<Search onLoadIngredients={filteredIngredientsHandler} />
