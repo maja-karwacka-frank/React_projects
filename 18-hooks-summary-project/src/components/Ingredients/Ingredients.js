@@ -21,8 +21,15 @@ const ingredientReducer = (currentIngredients, action) => {
 
 function Ingredients() {
 	const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-	const { isLoading, error, data, sendRequest, reqExtra, reqIdentifier } =
-		useHttp();
+	const {
+		isLoading,
+		error,
+		data,
+		sendRequest,
+		reqExtra,
+		reqIdentifier,
+		clear,
+	} = useHttp();
 
 	useEffect(() => {
 		if (!isLoading && !error && reqIdentifier === 'REMOVE_INGREDIENT') {
@@ -45,6 +52,7 @@ function Ingredients() {
 				'https://react-project-b3b30-default-rtdb.europe-west1.firebasedatabase.app/ingredients.json',
 				'POST',
 				JSON.stringify(ingredient),
+				ingredient,
 				'ADD_INGREDIENT'
 			);
 		},
@@ -64,8 +72,6 @@ function Ingredients() {
 		[sendRequest]
 	);
 
-	const clearError = useCallback(() => {}, []);
-
 	// useMemo przechowuje dowolne dane których nie chcemy odtwarzać przy każdym cyklu renderowania komponentu, ale tylko wtedy gdy tego potrzebujemy.
 	const ingredientList = useMemo(() => {
 		return (
@@ -78,7 +84,7 @@ function Ingredients() {
 
 	return (
 		<div className='App'>
-			{error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
+			{error && <ErrorModal onClose={clear}>{error}</ErrorModal>}
 			<IngredientForm
 				onAddIngredient={addIngredientHandler}
 				loading={isLoading}
