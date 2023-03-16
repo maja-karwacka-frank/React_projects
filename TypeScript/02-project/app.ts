@@ -1,30 +1,27 @@
-const person: {
-	name: string;
-	age: number;
-	hobbies: string[];
-	role: [number, string];
-} = {
-	name: 'Maja',
-	age: 18,
-	hobbies: ['Sports', 'Cooking'],
-	role: [2, 'author'], // tuples/krotka, tablica 2 elementowa, 1el jest numeryczny, 2el jest opisem lub identyfikatorem
+//union types
+
+const combine = (
+	input1: number | string,
+	input2: number | string,
+	resultConversion: 'as-number' | 'as-text' // literal types
+) => {
+	let result;
+	if (
+		(typeof input1 === 'number' && typeof input2 === 'number') ||
+		resultConversion === 'as-number'
+	) {
+		result = +input1 + +input2;
+	} else {
+		result = input1.toString() + input2.toString();
+	}
+	return result;
 };
 
-let favoriteActivities: string[];
-favoriteActivities = ['Sports'];
+const combinedAges = combine(30, 26, 'as-number');
+console.log(combinedAges);
 
-console.log(person.name);
+const combinedStringAges = combine('30', '26', 'as-number');
+console.log(combinedAges);
 
-for (const hobby of person.hobbies) {
-	console.log(hobby.toUpperCase());
-}
-
-enum Role {
-	Admin,
-	Read_only,
-	AUTHOR,
-}
-
-const person2 = {
-	role: Role.Admin,
-};
+const combinedNames = combine('Maja', 'Wojtek', 'as-text');
+console.log(combinedNames);
