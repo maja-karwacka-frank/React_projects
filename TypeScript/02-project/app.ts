@@ -1,15 +1,11 @@
-let userInput: unknown;
-let userName: string;
+class Department {
+	name: string;
 
-userInput = 5;
-userInput = 'Maja';
-if (typeof userInput === 'string') {
-	userName = userInput;
+	constructor(n: string) {
+		this.name = n;
+	}
 }
 
-// never - nigdy nic nie zwraca
-const generateError = (message: string, code: number): never => {
-	throw { message: message, errorCode: code };
-};
+const accounting = new Department('Accounting');
 
-generateError('An error ocurred!', 500);
+console.log(accounting);
