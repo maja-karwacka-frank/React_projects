@@ -25,12 +25,33 @@ type Universal = Combinable & Numeric;
 // type guards
 // typeof
 
+// Function Overloads
+function add(a: number, b: number): number;
+function add(a: string, b: string): string;
 function add(a: Combinable, b: Combinable) {
 	if (typeof a === 'string' || typeof b === 'string') {
 		return a.toString() + b.toString();
 	}
 	return a + b;
 }
+
+const result = add('banana', 'orange');
+result.split(' ');
+
+// Optional Chaining - jeśli coś istnieje ?
+
+const fetchedUserData = {
+	id: 'u1',
+	name: 'Max',
+	job: { title: 'CEO', description: 'My own company' },
+};
+console.log(fetchedUserData?.job?.title);
+
+// Nullish Coalescing - kiedy nie wiemy czy coś jest nullish lub undefined używamy ??
+
+const userInput = '';
+const storedData = userInput ?? 'DEFAULT';
+console.log(storedData);
 
 // 'key' in emp
 type UnknownEmployee = Employee | Admin;
@@ -119,7 +140,6 @@ const userInputElement = document.getElementById(
 
 userInputElement.value = 'Hi there!';
 
-
 // bez wykrzyknika ! musimy dać if:
 // const userInputElement = (
 // 	document.getElementById('user-input')
@@ -129,6 +149,13 @@ userInputElement.value = 'Hi there!';
 // 	(userInputElement as HTMLInputElement).value = 'Hi there!';
 // }
 
+// Index properties - nie musimy znać z góry nazw i ilości właściwości
 
-// Index properties
+interface ErrorContainer {
+	[prop: string]: string;
+}
 
+const errorBag: ErrorContainer = {
+	email: 'Not a valid email!',
+	username: 'Must start with a capital character!',
+};
