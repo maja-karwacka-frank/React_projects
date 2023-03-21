@@ -1,161 +1,77 @@
-type Admin = {
-	name: string;
-	privileges: string[];
-};
+// Generic types
 
-type Employee = {
-	name: string;
-	startDate: Date;
-};
+const names: Array<string> = [];
+// names[0].split(' ');
 
-type ElevatedEmployee = Admin & Employee;
+const promise: Promise<string> = new Promise((resolve, reject) => {
+	setTimeout(() => {
+		resolve('This is done!');
+	}, 2000);
+});
 
-const e1: ElevatedEmployee = {
-	name: 'Maja',
-	privileges: ['create-server'],
-	startDate: new Date(),
-};
+// my own generic type & constraints (extends)
 
-// intersection
-type Combinable = string | number;
-type Numeric = number | boolean;
-
-type Universal = Combinable & Numeric;
-
-// type guards
-// typeof
-
-// Function Overloads
-function add(a: number, b: number): number;
-function add(a: string, b: string): string;
-function add(a: Combinable, b: Combinable) {
-	if (typeof a === 'string' || typeof b === 'string') {
-		return a.toString() + b.toString();
-	}
-	return a + b;
+function merge<T extends object, U extends object>(objA: T, objB: U) {
+	return Object.assign({}, objA, objB);
 }
 
-const result = add('banana', 'orange');
-result.split(' ');
+const mergedObj = merge({ name: 'Maja' }, { age: 30 });
+console.log(mergedObj.age);
 
-// Optional Chaining - jeśli coś istnieje ?
+// another generic function
 
-const fetchedUserData = {
-	id: 'u1',
-	name: 'Max',
-	job: { title: 'CEO', description: 'My own company' },
-};
-console.log(fetchedUserData?.job?.title);
-
-// Nullish Coalescing - kiedy nie wiemy czy coś jest nullish lub undefined używamy ??
-
-const userInput = '';
-const storedData = userInput ?? 'DEFAULT';
-console.log(storedData);
-
-// 'key' in emp
-type UnknownEmployee = Employee | Admin;
-
-function printEmployeeInformation(emp: UnknownEmployee) {
-	console.log('Name: ' + emp.name);
-	if ('privileges' in emp) {
-		// czy właściwość istnieje w emp
-		console.log('Privileges: ' + emp.privileges);
-	}
-	if ('startDate' in emp) {
-		console.log('Start Date: ' + emp.startDate);
-	}
+interface Lengthy {
+	length: number;
 }
 
-printEmployeeInformation(e1);
+function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
+	let descriptionText = 'Got no value.';
+	if (element.length === 1) {
+		descriptionText = 'Got 1 element.';
+	} else if (element.length > 1) {
+		descriptionText = 'Got ' + element.length + ' elements.';
+	}
+	return [element, descriptionText];
+}
 
-// instanceof - if some obj is base on some class
-class Car {
-	drive() {
-		console.log('Driving...');
+console.log(countAndDescribe(['Cooking', 'Hiking']));
+
+// keyof constraint
+
+function extractAndConvert<T extends object, U extends keyof T>(
+	obj: T,
+	key: U
+) {
+	return 'Value: ' + obj[key];
+}
+
+console.log(extractAndConvert({ name: 'Maja' }, 'name'));
+
+// generic classes
+
+class DataStorage<T extends string | number | boolean> {
+	private data: T[] = [];
+
+	addItem(item: T) {
+		this.data.push(item);
+	}
+
+	removeItem(item: T) {
+		if (this.data.indexOf(item) === -1) {
+			return;
+		}
+		this.data.splice(this.data.indexOf(item), 1);
+	}
+
+	getItems() {
+		return [...this.data];
 	}
 }
 
-class Truck {
-	drive() {
-		console.log('Driving a truck...');
-	}
+const textStorage = new DataStorage<string>();
+textStorage.addItem('Maja');
+textStorage.addItem('Wojtek');
+textStorage.removeItem('Maja');
+console.log(textStorage.getItems());
 
-	loadCargo(amount: number) {
-		console.log('Loading cargo ...' + amount);
-	}
-}
-
-type Vehicle = Car | Truck;
-
-const v1 = new Car();
-const v2 = new Truck();
-
-function useVehicle(vehicle: Vehicle) {
-	vehicle.drive();
-	if (vehicle instanceof Truck) {
-		vehicle.loadCargo(1000);
-	}
-}
-
-useVehicle(v1);
-useVehicle(v2);
-
-// Discriminated Unions: 'type' - 1 wspólna właściwość w każdym obiekcie
-
-interface Bird {
-	type: 'bird';
-	flyingSpeed: number;
-}
-
-interface Horse {
-	type: 'horse';
-	runninSpeed: number;
-}
-
-type Animal = Bird | Horse;
-
-function moveAnimal(animal: Animal) {
-	let speed;
-	switch (animal.type) {
-		case 'bird':
-			speed = animal.flyingSpeed;
-			break;
-		case 'horse':
-			speed = animal.runninSpeed;
-	}
-	console.log('Moving at speed: ' + speed);
-}
-
-moveAnimal({ type: 'bird', flyingSpeed: 10 });
-
-// Type Casting
-
-// const userInputElement = <HTMLInputElement>(
-// 	document.getElementById('user-input')
-// );
-const userInputElement = document.getElementById(
-	'user-input'
-)! as HTMLInputElement;
-
-userInputElement.value = 'Hi there!';
-
-// bez wykrzyknika ! musimy dać if:
-// const userInputElement = (
-// 	document.getElementById('user-input')
-// )
-
-// if (userInputElement) {
-// 	(userInputElement as HTMLInputElement).value = 'Hi there!';
-// }
-
-// Index properties - nie musimy znać z góry nazw i ilości właściwości
-
-interface ErrorContainer {
-	[prop: string]: string;
-}
-
-const errorBag: ErrorContainer = {
-	email: 'Not a valid email!',
-	username: 'Must start with a capital character!',
-};
+const numberStorage = new DataStorage<number>();
