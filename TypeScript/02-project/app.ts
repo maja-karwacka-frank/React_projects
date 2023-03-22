@@ -75,3 +75,28 @@ textStorage.removeItem('Maja');
 console.log(textStorage.getItems());
 
 const numberStorage = new DataStorage<number>();
+
+// Generic Utility Types
+// Partial
+interface CourseGoal {
+	title: string;
+	description: string;
+	completeUntil: Date;
+}
+
+function createCourseGoal(
+	title: string,
+	description: string,
+	date: Date
+): CourseGoal {
+	let courseGoal: Partial<CourseGoal> = {};
+	courseGoal.title = title;
+	courseGoal.description = description;
+	courseGoal.completeUntil = date;
+	return courseGoal as CourseGoal;
+}
+
+// Readonly
+
+const names2: Readonly<string[]> = ['Anna', 'Wojtek'];
+// names2.push('Manu')
