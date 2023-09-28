@@ -1,0 +1,19 @@
+{
+  "name": "authentication-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "mongodb": "^6.1.0",
+    "next": "latest",
+    "next-auth": "^4.23.1",
+    "react": "latest",
+    "react-dom": "latest"
+  }
+}
