@@ -1,7 +1,11 @@
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 const GameOverScreen = () => {
-	return <View></View>;
+	return (
+		<View>
+			<Text>The Game is Over!</Text>
+		</View>
+	);
 };
 
 export default GameOverScreen;
