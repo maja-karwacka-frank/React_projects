@@ -22,10 +22,11 @@ const MealsOverviewScreen = ({ navigation, route }) => {
 	}, [catId, navigation]);
 
 	const renderMealItem = (itemData) => {
-		const { title, imageUrl, affordability, complexity, duration } =
+		const { title, imageUrl, affordability, complexity, duration, id } =
 			itemData.item;
 
 		const mealItemProps = {
+			id,
 			title,
 			imageUrl,
 			affordability,
