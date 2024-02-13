@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { FlatButton } from '../ui/FlatButton';
 import { AuthForm } from './AuthForm';
 import { Colors } from '../../constants/styles';
 
 export const AuthContent = ({ isLogin, onAuthenticate }) => {
+	const navigation = useNavigation();
+
 	const [credentialsInvalid, setCredentialsInvalid] = useState({
 		email: false,
 		password: false,
@@ -13,11 +16,15 @@ export const AuthContent = ({ isLogin, onAuthenticate }) => {
 		confirmPassword: false,
 	});
 
-	function switchAuthModeHandler() {
-		// Todo
-	}
+	const switchAuthModeHandler = () => {
+		if (isLogin) {
+			navigation.replace('Signup');
+		} else {
+			navigation.replace('Login');
+		}
+	};
 
-	function submitHandler(credentials) {
+	const submitHandler = (credentials) => {
 		let { email, confirmEmail, password, confirmPassword } = credentials;
 
 		email = email.trim();
@@ -43,7 +50,7 @@ export const AuthContent = ({ isLogin, onAuthenticate }) => {
 			return;
 		}
 		onAuthenticate({ email, password });
-	}
+	};
 
 	return (
 		<View style={styles.authContent}>
