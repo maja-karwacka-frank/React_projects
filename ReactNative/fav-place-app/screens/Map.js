@@ -3,17 +3,25 @@ import { Alert, StyleSheet } from 'react-native';
 import { useCallback, useLayoutEffect, useState } from 'react';
 import { IconButton } from '../components/ui/IconButton';
 
-const Map = ({ navigation }) => {
-	const [selectedLocation, setSelectedLocation] = useState();
+const Map = ({ navigation, route }) => {
+	const initailLocation = route.params && {
+		lat: route.params.initialLat,
+		lng: route.params.initialLng,
+	};
+
+	const [selectedLocation, setSelectedLocation] = useState(initailLocation);
+
 	const region = {
-		latitude: 37.78,
-		longitude: -122.43,
+		latitude: initailLocation ? initailLocation.lat : 37.78,
+		longitude: initailLocation ? initailLocation.lng : -122.43,
 		latitudeDelta: 0.0922,
 		longitudeDelta: 0.0421,
 	};
 
 	const selectLocationHandler = (event) => {
-		console.log(event);
+		if (initailLocation) {
+			return;
+		}
 		const lat = event.nativeEvent.coordinate.latitude;
 		const lng = event.nativeEvent.coordinate.longitude;
 
@@ -39,6 +47,9 @@ const Map = ({ navigation }) => {
 	}, [navigation, selectedLocation]);
 
 	useLayoutEffect(() => {
+		if (initailLocation) {
+			return;
+		}
 		navigation.setOptions({
 			headerRight: ({ tintColor }) => (
 				<IconButton
@@ -49,7 +60,7 @@ const Map = ({ navigation }) => {
 				/>
 			),
 		});
-	}, [navigation, savePickedLocationHandler]);
+	}, [navigation, savePickedLocationHandler, initailLocation]);
 
 	return (
 		<MapView
