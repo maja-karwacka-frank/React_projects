@@ -1,24 +1,78 @@
 {
-	"users": [
-		{
-			"id": "1",
-			"name": "Miecio"
-		},
-		{
-			"id": "9c67",
-			"name": "Frank Rau"
-		},
-		{
-			"id": "8430",
-			"name": "Frankie Hagenes"
-		}
-	],
-	"albums": [
-		{
-			"id": 10,
-			"title": "Hikking Trip",
-			"userId": "1"
-		}
-	],
-	"photos": []
+  "users": [
+    {
+      "id": "1",
+      "name": "Miecio"
+    },
+    {
+      "id": "9c67",
+      "name": "Frank Rau"
+    },
+    {
+      "id": "8430",
+      "name": "Frankie Hagenes"
+    },
+    {
+      "id": "7ef6",
+      "name": "Mrs. Daisy Simonis"
+    }
+  ],
+  "albums": [
+    {
+      "id": "10",
+      "title": "Hikking Trip",
+      "userId": "1"
+    },
+    {
+      "id": "cb16",
+      "userId": "1",
+      "title": "Modern Cotton Tuna"
+    },
+    {
+      "id": "96f4",
+      "userId": "1",
+      "title": "Oriental Soft Chicken"
+    },
+    {
+      "id": "bef4",
+      "userId": "7ef6",
+      "title": "Small Fresh Bacon"
+    },
+    {
+      "id": "0f54",
+      "userId": "1",
+      "title": "Incredible Granite Shirt"
+    },
+    {
+      "id": "f85d",
+      "userId": "1",
+      "title": "Elegant Wooden Hat"
+    },
+    {
+      "id": "21e4",
+      "userId": "1",
+      "title": "Incredible Concrete Gloves"
+    },
+    {
+      "id": "2c59",
+      "userId": "1",
+      "title": "Refined Concrete Cheese"
+    },
+    {
+      "id": "28e8",
+      "userId": "1",
+      "title": "Fantastic Steel Ball"
+    },
+    {
+      "id": "24e8",
+      "userId": "9c67",
+      "title": "Practical Granite Chicken"
+    },
+    {
+      "id": "b68d",
+      "userId": "8430",
+      "title": "Electronic Steel Table"
+    }
+  ],
+  "photos": []
 }
