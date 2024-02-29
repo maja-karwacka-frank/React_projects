@@ -1,18 +1,24 @@
 {
-  "users": [
-    {
-      "id": "1",
-      "name": "Miecio"
-    },
-    {
-      "id": "9c67",
-      "name": "Frank Rau"
-    },
-    {
-      "id": "8430",
-      "name": "Frankie Hagenes"
-    }
-  ],
-  "albums": [],
-  "photos": []
+	"users": [
+		{
+			"id": "1",
+			"name": "Miecio"
+		},
+		{
+			"id": "9c67",
+			"name": "Frank Rau"
+		},
+		{
+			"id": "8430",
+			"name": "Frankie Hagenes"
+		}
+	],
+	"albums": [
+		{
+			"id": 10,
+			"title": "Hikking Trip",
+			"userId": "1"
+		}
+	],
+	"photos": []
 }
