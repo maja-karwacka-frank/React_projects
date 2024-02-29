@@ -52,12 +52,38 @@
       "id": "b68d",
       "userId": "8430",
       "title": "Electronic Steel Table"
-    },
-    {
-      "id": "858d",
-      "userId": "9c67",
-      "title": "Licensed Rubber Gloves"
     }
   ],
-  "photos": []
+  "photos": [
+    {
+      "id": "d08c",
+      "albumId": "cb16",
+      "url": "https://picsum.photos/seed/18yQQAup/640/480"
+    },
+    {
+      "id": "857b",
+      "albumId": "10",
+      "url": "https://picsum.photos/seed/11vwL/640/480"
+    },
+    {
+      "id": "6785",
+      "albumId": "10",
+      "url": "https://loremflickr.com/640/480?lock=58902840344576"
+    },
+    {
+      "id": "d67c",
+      "albumId": "10",
+      "url": "https://loremflickr.com/640/480?lock=6471946155851776"
+    },
+    {
+      "id": "5d2b",
+      "albumId": "24e8",
+      "url": "https://picsum.photos/seed/KYTjtz8QC/640/480"
+    },
+    {
+      "id": "7b4f",
+      "albumId": "24e8",
+      "url": "https://loremflickr.com/640/480?lock=4566881149124608"
+    }
+  ]
 }
