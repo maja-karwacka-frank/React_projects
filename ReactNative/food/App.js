@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import SearchScreen from './src/screens/SearchScreen';
+import ResultsShowScreen from './src/screens/ResultsShowScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ export default function App() {
 						title: 'Business Search',
 					}}>
 					<Stack.Screen name='Search' component={SearchScreen} />
+					<Stack.Screen name='ResultsShow' component={ResultsShowScreen} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
