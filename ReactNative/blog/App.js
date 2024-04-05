@@ -1,11 +1,15 @@
 import 'react-native-gesture-handler';
 
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import IndexScreen from './src/screens/IndexScreen';
+import { Feather, EvilIcons } from '@expo/vector-icons';
 import { Provider } from './src/context/BlogContext';
+import IndexScreen from './src/screens/IndexScreen';
+import ShowScreen from './src/screens/ShowScreen';
+import CreateScreen from './src/screens/CreateScreen';
+import EditScreen from './src/screens/EditScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,7 +24,38 @@ export default function App() {
 						screenOptions={{
 							title: 'Blogs',
 						}}>
-						<Stack.Screen name='Index' component={IndexScreen} />
+						<Stack.Screen
+							name='Index'
+							component={IndexScreen}
+							options={({ navigation }) => ({
+								headerRight: () => (
+									<TouchableOpacity
+										onPress={() => navigation.navigate('Create')}>
+										<Feather
+											name='plus'
+											size={30}
+											style={{ marginRight: 10 }}
+										/>
+									</TouchableOpacity>
+								),
+							})}
+						/>
+						<Stack.Screen
+							name='Show'
+							component={ShowScreen}
+							options={({ navigation, route }) => ({
+								headerRight: () => (
+									<TouchableOpacity
+										onPress={() =>
+											navigation.navigate('Edit', { id: route.params.id })
+										}>
+										<EvilIcons name='pencil' size={35} />
+									</TouchableOpacity>
+								),
+							})}
+						/>
+						<Stack.Screen name='Create' component={CreateScreen} />
+						<Stack.Screen name='Edit' component={EditScreen} />
 					</Stack.Navigator>
 				</NavigationContainer>
 			</Provider>
