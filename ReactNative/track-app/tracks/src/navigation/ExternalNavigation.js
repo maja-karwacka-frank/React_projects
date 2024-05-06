@@ -13,7 +13,9 @@ export const ExternalNavigation = () => {
 			<ExternalStack.Screen
 				name='Signup'
 				component={SignupScreen}
-				// options={}
+				options={{
+					headerShown: false,
+				}}
 			/>
 			<ExternalStack.Screen
 				name='Signin'
