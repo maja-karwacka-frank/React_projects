@@ -1,21 +1,21 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
-
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
-
-const Stack = createStackNavigator();
-const Tab = createMaterialBottomTabNavigator();
+import { InternalTabNavigation } from './src/navigation/InternalNavigation';
+import { ExternalNavigation } from './src/navigation/ExternalNavigation';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
+	const isUser = true;
 	return (
-		<>
+		<SafeAreaProvider>
 			<StatusBar style='auto' />
-			<NavigationContainer>{/* Rest of your app code */}</NavigationContainer>
-		</>
+			<NavigationContainer>
+				{isUser ? <InternalTabNavigation /> : <ExternalNavigation />}
+			</NavigationContainer>
+		</SafeAreaProvider>
 	);
 }
 
