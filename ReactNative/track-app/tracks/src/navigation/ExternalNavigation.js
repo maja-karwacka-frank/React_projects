@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import SigninScreen from '../screens/SigninScreen';
 import SignupScreen from '../screens/SignupScreen';
+import ResolveAuthScreen from '../screens/ResolveAuthScreen';
 
 const ExternalStack = createStackNavigator();
 
@@ -10,6 +11,13 @@ export const ExternalNavigation = () => {
 		<ExternalStack.Navigator
 		// screenOptions={}
 		>
+			<ExternalStack.Screen
+				name='ResolveAuth'
+				component={ResolveAuthScreen}
+				options={{
+					headerShown: false,
+				}}
+			/>
 			<ExternalStack.Screen
 				name='Signup'
 				component={SignupScreen}
@@ -20,7 +28,9 @@ export const ExternalNavigation = () => {
 			<ExternalStack.Screen
 				name='Signin'
 				component={SigninScreen}
-				// options={}
+				options={{
+					headerShown: false,
+				}}
 			/>
 		</ExternalStack.Navigator>
 	);
