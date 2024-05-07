@@ -6,13 +6,14 @@ import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Navigation } from './src/navigation/Navigation';
+import { navigationRef } from './src/navigationRef';
 
 export default function App() {
 	return (
 		<AuthProvider>
 			<SafeAreaProvider>
 				<StatusBar style='auto' />
-				<NavigationContainer>
+				<NavigationContainer ref={navigationRef}>
 					<Navigation />
 				</NavigationContainer>
 			</SafeAreaProvider>
